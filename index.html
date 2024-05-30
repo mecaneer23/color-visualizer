@@ -30,5 +30,23 @@
             </svg>
         </a>
         <h1>Color Visualizer</h1>
+        <div class="box" draggable="true">
+            <div class="sticky"></div>
+            <input placeholder="Add a color..." />
+        </div>
+        <script>
+            function updateColor(box) {
+                let input = box.querySelector("input");
+                let color = input.value;
+                input.backgroundColor = color;
+                box.backgroundColor = color;
+            }
+            const boxes = document.querySelectorAll(".box");
+            for (let box of boxes) {
+                box.querySelector("input").addEventListener("change", () =>
+                    updateColor(box),
+                );
+            }
+        </script>
     </body>
 </html>
