@@ -30,12 +30,12 @@
         function updateColor(box) {
             let input = box.querySelector("input");
             let color = input.value;
-            input.backgroundColor = color;
-            box.backgroundColor = color;
+            input.style.backgroundColor = color;
+            box.style.backgroundColor = color;
         }
         const boxes = document.querySelectorAll(".box");
         for (let box of boxes) {
-            box.querySelector("input").addEventListener("change", () =>
+            box.querySelector("input").addEventListener("keyup", () =>
                 updateColor(box),
             );
         }
