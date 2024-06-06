@@ -42,6 +42,49 @@
         const ul = document.querySelector("ul");
         const original = document.querySelector("#original");
 
+        function getRGB(c) {
+            rgb = parseInt(c, 16) || c;
+            return rgb / 255 <= 0.03928
+                ? rgb / 255 / 12.92
+                : Math.pow((rgb / 255 + 0.055) / 1.055, 2.4);
+        }
+
+        function getLuminance(hexColor) {
+            return (
+                0.2126 * getRGB(hexColor.substr(1, 2)) +
+                0.7152 * getRGB(hexColor.substr(3, 2)) +
+                0.0722 * getRGB(hexColor.substr(-2))
+            );
+        }
+
+        function standardizeColorToHex(str) {
+            const ctx = document.createElement('canvas').getContext('2d');
+            ctx.fillStyle = str;
+            return ctx.fillStyle;
+        }
+
+        function getContrast(a, b) {
+            const L1 = getLuminance(standardizeColorToHex(a));
+            const L2 = getLuminance(standardizeColorToHex(b));
+            return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+        }
+
+        function isValidColor(strColor) {
+            var s = new Option().style;
+            s.color = strColor;
+
+            return s.color == strColor.toLowerCase();
+        }
+
+        function getTextColor(bgColor) {
+            if (!isValidColor(bgColor)) {
+                return "#000000";
+            }
+            return getContrast(bgColor, '#ffffff') > getContrast(bgColor, '#000000')
+                ? '#ffffff'
+                : '#000000';
+        }
+
         function getNumEmptyBoxes() {
             let count = 0;
             for (let item of ul.children) {
@@ -56,6 +99,7 @@
             const input = box.querySelector("input");
             const color = input.value || "white";
             input.style.backgroundColor = color;
+            input.style.color = getTextColor(color);
             box.style.backgroundColor = color;
             const emptyBoxes = getNumEmptyBoxes();
             if (emptyBoxes > 1) {
