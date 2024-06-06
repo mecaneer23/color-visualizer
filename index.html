@@ -24,6 +24,10 @@
         </svg>
     </a>
     <h1>Color Visualizer</h1>
+    <form action="javascript:setBackgroundColor()">
+        <input id="backgroundColor" type="color" value="#808080">
+        <input type="submit" value="Set background color">
+    </form>
     <ul>
         <li id="original" class="box">
             <div class="handle">
@@ -36,7 +40,7 @@
                 <div class="cell"></div>
                 <div class="cell"></div>
             </div>
-            <input placeholder="Add a color..." />
+            <input class="input" placeholder="Add a color..." />
         </li>
     </ul>
     <script>
@@ -113,6 +117,12 @@
                 updateColor(newNode),
             );
             ul.appendChild(newNode);
+        }
+
+        function setBackgroundColor() {
+            let color = document.getElementById("backgroundColor").value;
+            document.body.style.backgroundColor = color;
+            document.querySelector(".github-corner").style.color = color;
         }
 
         const boxes = document.querySelectorAll(".box");
