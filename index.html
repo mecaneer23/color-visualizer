@@ -8,6 +8,7 @@
     <title>Color Visualizer</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="validateColor.js"></script>
 </head>
 
 <body>
@@ -43,7 +44,7 @@
         const original = document.querySelector("#original");
 
         function getRGB(c) {
-            rgb = parseInt(c, 16) || c;
+            let rgb = parseInt(c, 16) || c;
             return rgb / 255 <= 0.03928
                 ? rgb / 255 / 12.92
                 : Math.pow((rgb / 255 + 0.055) / 1.055, 2.4);
@@ -67,13 +68,6 @@
             const L1 = getLuminance(standardizeColorToHex(a));
             const L2 = getLuminance(standardizeColorToHex(b));
             return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
-        }
-
-        function isValidColor(strColor) {
-            var s = new Option().style;
-            s.color = strColor;
-
-            return s.color == strColor.toLowerCase();
         }
 
         function getTextColor(bgColor) {
