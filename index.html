@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Visualizer</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 </head>
 
 <body>
@@ -22,23 +23,67 @@
         </svg>
     </a>
     <h1>Color Visualizer</h1>
-    <div class="box" draggable="true">
-        <div class="sticky"></div>
-        <input placeholder="Add a color..." />
-    </div>
+    <ul>
+        <li id="original" class="box">
+            <div class="handle">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <input placeholder="Add a color..." />
+        </li>
+    </ul>
     <script>
+        const ul = document.querySelector("ul");
+        const original = document.querySelector("#original");
+
+        function getNumEmptyBoxes() {
+            let count = 0;
+            for (let item of ul.children) {
+                if (item.querySelector("input").value.length == 0) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         function updateColor(box) {
-            let input = box.querySelector("input");
-            let color = input.value;
+            const input = box.querySelector("input");
+            const color = input.value || "white";
             input.style.backgroundColor = color;
             box.style.backgroundColor = color;
+            const emptyBoxes = getNumEmptyBoxes();
+            // const totalBoxes = ul.childElementCount;
+            if (emptyBoxes > 1) {
+                ul.removeChild(ul.children[ul.children.length - 1]);
+            } else if (emptyBoxes == 0) {
+                const newNode = original.cloneNode(true);
+                newNode.id = "";
+                const newInput = newNode.querySelector("input");
+                newInput.value = "";
+                newNode.style.backgroundColor = "white";
+                newInput.style.backgroundColor = "white";
+                newInput.addEventListener("keyup", () =>
+                    updateColor(newNode),
+                );
+                ul.appendChild(newNode);
+            }
         }
+
         const boxes = document.querySelectorAll(".box");
         for (let box of boxes) {
             box.querySelector("input").addEventListener("keyup", () =>
                 updateColor(box),
             );
         }
+        new Sortable(document.querySelector("ul"), {
+            animation: 150,
+        });
     </script>
 </body>
 
