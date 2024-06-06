@@ -58,21 +58,23 @@
             input.style.backgroundColor = color;
             box.style.backgroundColor = color;
             const emptyBoxes = getNumEmptyBoxes();
-            // const totalBoxes = ul.childElementCount;
             if (emptyBoxes > 1) {
                 ul.removeChild(ul.children[ul.children.length - 1]);
-            } else if (emptyBoxes == 0) {
-                const newNode = original.cloneNode(true);
-                newNode.id = "";
-                const newInput = newNode.querySelector("input");
-                newInput.value = "";
-                newNode.style.backgroundColor = "white";
-                newInput.style.backgroundColor = "white";
-                newInput.addEventListener("keyup", () =>
-                    updateColor(newNode),
-                );
-                ul.appendChild(newNode);
+                return;
             }
+            if (emptyBoxes != 0) {
+                return;
+            }
+            const newNode = original.cloneNode(true);
+            newNode.id = "";
+            const newInput = newNode.querySelector("input");
+            newInput.value = "";
+            newNode.style.backgroundColor = "white";
+            newInput.style.backgroundColor = "white";
+            newInput.addEventListener("keyup", () =>
+                updateColor(newNode),
+            );
+            ul.appendChild(newNode);
         }
 
         const boxes = document.querySelectorAll(".box");
